@@ -1,0 +1,61 @@
+/* Sky-blue themed styles for WebRehab login */
+:root{
+  --bg-1: #e6f7ff; /* very pale sky */
+  --bg-2: #d0efff; /* pale sky */
+  --accent: #4da6ff; /* sky blue accent */
+  --accent-dark: #2b8cff;
+  --card-bg: #ffffff;
+  --muted: #6b6f76;
+}
+
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color:#1a1a1a;
+  -webkit-font-smoothing:antialiased;
+}
+
+.wr-site{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.login-hero{width:100%; max-width:980px; display:flex; align-items:center; justify-content:center}
+
+.login-card{
+  background:var(--card-bg);
+  border-radius:12px;
+  box-shadow: 0 8px 30px rgba(24,39,75,0.12);
+  padding:28px 32px;
+  width:100%; max-width:420px;
+  text-align:center;
+}
+
+.login-brand h1{margin:0; font-size:28px; color:var(--accent-dark)}
+.login-brand .tag{margin:6px 0 18px; color:var(--muted); font-size:14px}
+
+.login-form{display:flex; flex-direction:column; gap:12px;}
+.form-row{display:flex; flex-direction:column; text-align:left}
+.form-row label{font-size:13px; margin-bottom:6px; color:var(--muted)}
+.form-row input{padding:10px 12px; border-radius:8px; border:1px solid #e7eef6; background:#fbfdff}
+.form-row input:focus{outline:none; box-shadow:0 0 0 3px rgba(77,166,255,0.12); border-color:var(--accent)}
+
+.form-actions{display:flex; justify-content:center; margin-top:6px}
+.btn-primary{background:linear-gradient(180deg,var(--accent),var(--accent-dark)); color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600}
+.btn-primary:hover{filter:brightness(0.98)}
+
+.signup-link{margin-top:14px; font-size:14px; color:var(--muted)}
+.signup-link a{color:var(--accent-dark); text-decoration:none; font-weight:600}
+
+.wr-messages{position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:60}
+.wr-message{background:rgba(255,255,255,0.95); padding:8px 12px; border-radius:6px; box-shadow:0 6px 18px rgba(24,39,75,0.06); margin-bottom:8px}
+
+@media (max-width:520px){
+  .login-card{padding:20px; border-radius:10px}
+  .login-brand h1{font-size:22px}
+}

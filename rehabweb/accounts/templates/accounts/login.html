@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <section class="login-hero">
+    <div class="login-card">
+      <div class="login-brand">
+        <h1>WebRehab</h1>
+        <p class="tag">Clínica de rehabilitación</p>
+      </div>
+      <form method="post" class="login-form">
+        {% csrf_token %}
+        <div class="form-row">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+        </div>
+        <div class="form-row">
+          {{ form.password.label_tag }}
+          {{ form.password }}
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Iniciar sesión</button>
+        </div>
+      </form>
+      <p class="signup-link">¿No tienes cuenta? <a href="{% url 'accounts:signup' %}">Regístrate</a></p>
+    </div>
+  </section>
+{% endblock %}

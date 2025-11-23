@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Exercises</h1>
+  <p><a href="{% url 'exercises:create' %}">Create exercise</a> | <a href="{% url 'accounts:logout' %}">Logout</a></p>
+  <ul>
+    {% for ex in exercises %}
+      <li><a href="#">{{ ex.descripcion }}</a></li>
+    {% empty %}
+      <li>No exercises yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
