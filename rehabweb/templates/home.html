@@ -1,0 +1,10 @@
+{% extends "base_regular.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="text-center">
+    <img src="{% static 'img/logo.png' %}" alt="Logo WebRehab" class="img-fluid mb-4" style="max-height:180px;" onerror="this.style.display='none'">
+    <h1 class="fw-bold">{{ welcome_message }}</h1>
+    <p class="lead">Bienvenido al panel principal. Usa las opciones del menú para navegar por las aplicaciones.</p>
+  </div>
+{% endblock %}
