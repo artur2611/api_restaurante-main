@@ -47,7 +47,6 @@
                 <i class="bi bi-pencil-fill"></i>
               </a>
 
-              {% comment %} action="{% url 'exercises:delete' ex.id %}"  {% endcomment %}
               <form method="post" 
               class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
                 {% csrf_token %}
@@ -65,11 +64,18 @@
           </tr>
         {% empty %}
           <tr>
-            <td colspan="3" class="text-center">No exercises yet.</td>
+            <td colspan="7" class="text-center">No exercises yet.</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+  </div>
+
+  <!-- BOTÓN PARA AÑADIR EJERCICIO (debajo de la tabla) -->
+  <div class="mt-4 d-flex justify-content-end">
+    <a href="{% url 'exercises:create' %}" class="btn btn-success btn-lg">
+      <i class="bi bi-plus-circle"></i> Añadir Ejercicio
+    </a>
   </div>
 
 </div>

@@ -88,10 +88,10 @@
 
     <main class="wr-site">
       {% if messages %}
-      <div class="container mt-3">
-        <div class="wr-messages">
+      <div class="wr-messages" style="position: fixed; top: 72px; left: 0; right: 0; z-index: 1050; width: 100%;">
+        <div class="container">
           {% for m in messages %}
-          <div class="wr-message">{{ m }}</div>
+            <div class="wr-message">{{ m }}</div>
           {% endfor %}
         </div>
       </div>
