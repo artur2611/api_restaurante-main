@@ -110,9 +110,9 @@ def listar_usuarios(current_user):
     usuarios = [u.json() for u in Usuario.query.all()]
     return jsonify({"usuarios": usuarios}), 200
 
-@app.route('/usuarios/<int:user_id>', methods=['GET'])
+@app.route('/usuarios/<string:user_id>', methods=['GET'])
 @token_required
-def get_usuario( user_id):
+def get_usuario(current_user, user_id):
     usuario = Usuario.query.get(user_id)
     if not usuario:
         return error_response("Usuario no encontrado", 404)
@@ -123,7 +123,7 @@ def crear_usuario_public():
     
     return register()
 
-@app.route('/usuarios/<int:user_id>', methods=['PUT'])
+@app.route('/usuarios/<string:user_id>', methods=['PUT'])
 @token_required
 def update_usuario(current_user, user_id):
     usuario = Usuario.query.get(user_id)
@@ -140,7 +140,7 @@ def update_usuario(current_user, user_id):
     db.session.commit()
     return jsonify({"message": "Usuario actualizado", "usuario": usuario.json()}), 200
 
-@app.route('/usuarios/<int:user_id>', methods=['DELETE'])
+@app.route('/usuarios/<string:user_id>', methods=['DELETE'])
 @token_required
 def delete_usuario(current_user, user_id):
     usuario = Usuario.query.get(user_id)
@@ -157,7 +157,7 @@ def listar_ejercicios(current_user):
     ejercicios = [e.json() for e in Ejercicio.query.all()]
     return jsonify({"ejercicios": ejercicios}), 200
 
-@app.route('/ejercicios/<int:ej_id>', methods=['GET'])
+@app.route('/ejercicios/<string:ej_id>', methods=['GET'])
 @token_required
 def get_ejercicio(current_user, ej_id):
     ejercicio = Ejercicio.query.get(ej_id)
@@ -192,7 +192,7 @@ def crear_ejercicio(current_user):
     db.session.commit()
     return jsonify({"message": "Ejercicio creado", "ejercicio": e.json()}), 201
 
-@app.route('/ejercicios/<int:ej_id>', methods=['PUT'])
+@app.route('/ejercicios/<string:ej_id>', methods=['PUT'])
 @token_required
 def update_ejercicio(current_user, ej_id):
     ejercicio = Ejercicio.query.get(ej_id)
@@ -206,7 +206,7 @@ def update_ejercicio(current_user, ej_id):
     db.session.commit()
     return jsonify({"message": "Ejercicio actualizado", "ejercicio": ejercicio.json()}), 200
 
-@app.route('/ejercicios/<int:ej_id>', methods=['DELETE'])
+@app.route('/ejercicios/<string:ej_id>', methods=['DELETE'])
 @token_required
 def delete_ejercicio(current_user, ej_id):
     ejercicio = Ejercicio.query.get(ej_id)
@@ -223,7 +223,7 @@ def listar_sesiones(current_user):
     sesiones = [s.json() for s in Sesion.query.all()]
     return jsonify({"sesiones": sesiones}), 200
 
-@app.route('/sesiones/<int:s_id>', methods=['GET'])
+@app.route('/sesiones/<string:s_id>', methods=['GET'])
 @token_required
 def get_sesion(current_user, s_id):
     s = Sesion.query.get(s_id)
@@ -259,31 +259,26 @@ def crear_sesion(current_user):
     db.session.commit()
     return jsonify({"message": "Sesion creada", "sesion": s.json()}), 201
 
-@app.route('/sesiones/<s_id>', methods=['PUT'])
+@app.route('/sesiones/<string:s_id>', methods=['PUT'])
 @token_required
 def update_sesion(current_user, s_id):
     s = Sesion.query.get(s_id)
     if not s:
         return error_response("Sesion no encontrada", 404)
     data = request.get_json() or {}
-    if 'repeticiones_logradas' in data:
-        s.repeticiones_logradas = data['repeticiones_logradas']
-    if 'maximo_nivel_logrado' in data:
-        s.maximo_nivel_logrado = data['maximo_nivel_logrado']
-    db.session.commit()
-    return jsonify({"message": "Sesion actualizada", "sesion": s.json()}), 200
+    if data.get('id_ejercicio') and not Ejercicio.query.get(data.get('id_ejercicio')):
+        return error_response("Ejercicio no existe", 404)
+    if data.get('id_usuario') and not Usuario.query.get(data.get('id_usuario')):
+        return error_response("Usuario no existe", 404)
 
-@app.route('/sesiones/<int:s_id>', methods=['PUT'])
-def update_sesion_repeticiones(current_user, s_id):
-    s = Sesion.query.get(s_id)
-    if not s:
-        return error_response("Sesion no encontrada", 404)
-    data = request.get_json() or {}
+    s.id_ejercicio = data.get('id_ejercicio', s.id_ejercicio)
+    s.id_usuario = data.get('id_usuario', s.id_usuario)
     s.repeticiones_logradas = data.get('repeticiones_logradas', s.repeticiones_logradas)
+    s.maximo_nivel_logrado = data.get('maximo_nivel_logrado', s.maximo_nivel_logrado)
     db.session.commit()
     return jsonify({"message": "Sesion actualizada", "sesion": s.json()}), 200
 
-@app.route('/sesiones/<int:s_id>', methods=['DELETE'])
+@app.route('/sesiones/<string:s_id>', methods=['DELETE'])
 @token_required
 def delete_sesion(current_user, s_id):
     s = Sesion.query.get(s_id)

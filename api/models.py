@@ -8,7 +8,7 @@ db = SQLAlchemy()
 class Usuario(db.Model):
     __tablename__ = "usuarios"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(200), primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     fecha_nacimiento = db.Column(db.Date, nullable=False)
     telefono = db.Column(db.String(15), unique=True, nullable=False)
