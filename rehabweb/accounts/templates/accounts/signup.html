@@ -1,31 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <section class="login-hero">
+<section class="login-hero">
     <div class="login-card">
-      <div class="login-brand">
-        <h1>WebRehab</h1>
-        <p class="tag">Crear cuenta</p>
-      </div>
-      <form method="post" class="login-form">
-        {% csrf_token %}
-        <div class="form-row input-group">
-          <span class="input-group-text"><i class="bi bi-person"></i></span>
-          {{ form.username }}
+        <div class="login-brand">
+            <h1>WebRehab</h1>
+            <p class="tag">Crear cuenta</p>
         </div>
-        <div class="form-row input-group">
-          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-          {{ form.email }}
-        </div>
-        <div class="form-row input-group">
-          <span class="input-group-text"><i class="bi bi-lock"></i></span>
-          {{ form.password }}
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary">Crear cuenta</button>
-        </div>
-      </form>
-      <p class="signup-link">¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}">Inicia sesión</a></p>
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <div class="form-row input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-person"></i>
+                </span>
+                {{ form.nombre }}
+            </div>
+            <div class="form-row input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-telephone"></i>
+                </span>
+                {{ form.telefono }}
+            </div>
+            <div class="form-row input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-calendar"></i>
+                </span>
+                {{ form.fecha_nacimiento }}
+            </div>
+            <div class="form-row input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                </span>
+                {{ form.contrasena }}
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Crear cuenta</button>
+            </div>
+        </form>
+        <p class="signup-link">
+            ¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}">Inicia sesión</a>
+        </p>
     </div>
-  </section>
+</section>
 {% endblock %}

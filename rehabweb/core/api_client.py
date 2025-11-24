@@ -1,3 +1,4 @@
+
 from urllib.parse import urljoin
 
 import requests
@@ -55,10 +56,13 @@ def login(username, password):
     raise ApiClientError('Failed to call login endpoint')
 
 
-def signup(username, email, password):
+def signup(nombre, telefono,fecha_nacimiento,contrasena):
     try:
+        if hasattr(fecha_nacimiento, 'isoformat'):
+            fecha_nacimiento = fecha_nacimiento.isoformat()
+        payload ={}
         # In your API users are created under /usuarios (POST)
-        r = requests.post(_url('usuarios'), json={'nombre': username, 'email': email, 'password': password}, timeout=TIMEOUT)
+        r = requests.post(_url('registro'), json={'nombre': nombre, 'telefono': telefono, 'fecha_nacimiento': fecha_nacimiento, 'contrasena': contrasena}, timeout=TIMEOUT)
         if r.status_code in (200, 201):
             return r.json()
         if r.status_code == 400:

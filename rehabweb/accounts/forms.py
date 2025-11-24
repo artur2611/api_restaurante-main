@@ -18,20 +18,36 @@ class LoginForm(forms.Form):
         })
     )
 
-
 class SignupForm(forms.Form):
-    username = forms.CharField(
+    nombre = forms.CharField(
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Nombre de usuario',
+            'placeholder': 'Nombre completo',
         })
     )
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Correo electrónico',
-    }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Contraseña',
-    }))
+
+    telefono = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Teléfono',
+        }),
+        required=False
+    )
+
+    fecha_nacimiento = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'YYYY-MM-DD',
+            'type': 'date'
+        }),
+        required=False
+    )
+
+    contrasena = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contraseña',
+        })
+    )
+

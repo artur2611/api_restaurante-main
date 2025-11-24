@@ -31,16 +31,23 @@ def signup_view(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             try:
-                api_client.signup(form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
+                api_client.signup(
+                    form.cleaned_data['nombre'],
+                    form.cleaned_data['telefono'],
+                    form.cleaned_data['fecha_nacimiento'],
+                    form.cleaned_data['contrasena']
+                )
             except Exception as exc:
-                messages.error(request, 'Signup failed')
+                messages.error(request, f"Error al registrarse: {str(exc)}")
                 form.add_error(None, str(exc))
             else:
-                messages.success(request, 'Account created — please log in')
+                messages.success(request, 'Cuenta creada correctamente, ahora inicia sesión')
                 return redirect(reverse('accounts:login'))
     else:
         form = SignupForm()
+
     return render(request, 'accounts/signup.html', {'form': form})
+
 
 
 def logout_view(request):
