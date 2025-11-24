@@ -181,3 +181,30 @@ def delete_user(token, user_id):
         return True
     except RequestException as exc:
         raise ApiClientError('Failed to delete usuario') from exc
+
+
+# --- Sesiones (sessions) helpers ---
+def get_sesiones(token, params=None):
+    try:
+        r = requests.get(_url('sesiones'), headers=_headers(token), params=params or {}, timeout=TIMEOUT)
+        r.raise_for_status()
+        data = r.json()
+        # Normalize to a list of ejercicios. API may return:
+        # - a list directly
+        # - a dict wrapper like {'ejercicios': [...]} or {'data': [...]} or {'results': [...]}
+        # - a single object (one ejercicio)
+        if isinstance(data, list):
+            return data
+        if isinstance(data, dict):
+            for key in ('sesiones', 'results', 'data', 'items'):
+                if key in data and isinstance(data[key], list):
+                    return data[key]
+            for v in data.values():
+                if isinstance(v, list):
+                    return v
+            if any(k in data for k in ('id', 'fecha_creado', 'id_ejercicio', 'id_usuario', 'repeticiones_logradas', 'maximo_nivel_logrado')):
+                return [data]
+            return []
+        return []
+    except RequestException as exc:
+        raise ApiClientError('Error al obtener sesiones') from exc
