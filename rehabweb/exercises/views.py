@@ -39,13 +39,15 @@ def create_view(request):
             payload = form.cleaned_data
             try:
                 api_client.create_exercise(token, payload)
-            except Exception:
-                messages.error(request, 'Failed to create exercise')
+            except Exception as exc:
+                messages.error(request, 'No se pudo crear el ejercicio: %s' % str(exc))
+                form.add_error(None, str(exc))
             else:
+                messages.success(request, 'Ejercicio creado correctamente.')
                 return redirect(reverse('exercises:list'))
     else:
         form = ExerciseAPIForm()
-    return render(request, 'exercises/form.html', {'form': form})
+    return render(request, 'exercises/create.html', {'form': form})
 
 @api_login_required
 def edit_view(request, exercise_id):

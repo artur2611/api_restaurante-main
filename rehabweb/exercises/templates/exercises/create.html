@@ -1,0 +1,48 @@
+{% extends 'base_regular.html' %}
+
+{% block content %}
+<style>
+  /* Fijar mensajes en la parte superior sin afectar el flujo */
+  .wr-messages {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    width: 100%;
+  }
+
+  .wr-message {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  /* Ajustar padding del contenido cuando hay mensajes */
+  .wr-content-center {
+    padding-top: calc(1.5rem + 100px) !important;
+  }
+</style>
+
+<div class="container py-4">
+  <h1 class="h4 mb-3">Crear nuevo ejercicio</h1>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="card p-3">
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Crear</button>
+        <a href="{% url 'exercises:list' %}" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
