@@ -259,22 +259,27 @@ def crear_sesion(current_user):
     db.session.commit()
     return jsonify({"message": "Sesion creada", "sesion": s.json()}), 201
 
-@app.route('/sesiones/<int:s_id>', methods=['PUT'])
+@app.route('/sesiones/<s_id>', methods=['PUT'])
 @token_required
 def update_sesion(current_user, s_id):
     s = Sesion.query.get(s_id)
     if not s:
         return error_response("Sesion no encontrada", 404)
     data = request.get_json() or {}
-    if data.get('id_ejercicio') and not Ejercicio.query.get(data.get('id_ejercicio')):
-        return error_response("Ejercicio no existe", 404)
-    if data.get('id_usuario') and not Usuario.query.get(data.get('id_usuario')):
-        return error_response("Usuario no existe", 404)
+    if 'repeticiones_logradas' in data:
+        s.repeticiones_logradas = data['repeticiones_logradas']
+    if 'maximo_nivel_logrado' in data:
+        s.maximo_nivel_logrado = data['maximo_nivel_logrado']
+    db.session.commit()
+    return jsonify({"message": "Sesion actualizada", "sesion": s.json()}), 200
 
-    s.id_ejercicio = data.get('id_ejercicio', s.id_ejercicio)
-    s.id_usuario = data.get('id_usuario', s.id_usuario)
+@app.route('/sesiones/<int:s_id>', methods=['PUT'])
+def update_sesion_repeticiones(current_user, s_id):
+    s = Sesion.query.get(s_id)
+    if not s:
+        return error_response("Sesion no encontrada", 404)
+    data = request.get_json() or {}
     s.repeticiones_logradas = data.get('repeticiones_logradas', s.repeticiones_logradas)
-    s.maximo_nivel_logrado = data.get('maximo_nivel_logrado', s.maximo_nivel_logrado)
     db.session.commit()
     return jsonify({"message": "Sesion actualizada", "sesion": s.json()}), 200
 
