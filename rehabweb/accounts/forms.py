@@ -17,7 +17,7 @@ class LoginForm(forms.Form):
             'aria-label': 'Contraseña',
         })
     )
-
+#se agrego el formulario de registro
 class SignupForm(forms.Form):
     nombre = forms.CharField(
         max_length=150,

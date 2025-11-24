@@ -25,7 +25,7 @@ def login_view(request):
         form = LoginForm()
     return render(request, 'accounts/login.html', {'form': form})
 
-
+#se agrego la vista de registro
 def signup_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)

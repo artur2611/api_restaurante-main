@@ -71,7 +71,7 @@ def signup(nombre, telefono,fecha_nacimiento,contrasena):
     except RequestException as exc:
         raise ApiClientError('Failed to call signup endpoint') from exc
 
-
+#como que no se hizo comit 
 def get_exercises(token, params=None):
     try:
         r = requests.get(_url('ejercicios'), headers=_headers(token), params=params or {}, timeout=TIMEOUT)
