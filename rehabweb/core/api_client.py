@@ -101,7 +101,7 @@ def get_exercise(token, exercise_id):
         r.raise_for_status()
         return r.json()
     except RequestException as exc:
-        raise ApiClientError('Failed to fetch ejercicio') from exc
+        raise ApiClientError('Fallo al obtener el ejercicio') from exc
 
 
 def create_exercise(token, payload):
