@@ -220,8 +220,25 @@ def delete_ejercicio(current_user, ej_id):
 @app.route('/sesiones', methods=['GET'])
 @token_required
 def listar_sesiones(current_user):
-    sesiones = [s.json() for s in Sesion.query.all()]
+    """
+    Devuelve las sesiones incluyendo los datos del usuario (nombre, id, ...) y
+    del ejercicio asociado en cada sesión.
+    """
+    sesiones = []
+    for s in Sesion.query.all():
+        usuario = Usuario.query.get(s.id_usuario)
+        ejercicio = Ejercicio.query.get(s.id_ejercicio)
+
+        ses = s.json()
+        ses['usuario'] = usuario.json() if usuario else None
+        ses['ejercicio'] = ejercicio.json() if ejercicio else None
+
+        sesiones.append(ses)
+
     return jsonify({"sesiones": sesiones}), 200
+
+
+
 
 @app.route('/sesiones/<string:s_id>', methods=['GET'])
 @token_required
@@ -275,6 +292,7 @@ def update_sesion(current_user, s_id):
     s.id_usuario = data.get('id_usuario', s.id_usuario)
     s.repeticiones_logradas = data.get('repeticiones_logradas', s.repeticiones_logradas)
     s.maximo_nivel_logrado = data.get('maximo_nivel_logrado', s.maximo_nivel_logrado)
+    s.fecha_termino = data.get('fecha_termino', s.fecha_termino)
     db.session.commit()
     return jsonify({"message": "Sesion actualizada", "sesion": s.json()}), 200
 
@@ -287,6 +305,31 @@ def delete_sesion(current_user, s_id):
     db.session.delete(s)
     db.session.commit()
     return jsonify({"message": "Sesion eliminada"}), 200
+
+@app.route('/sesiones/usuario/<string:user_id>', methods=['GET'])
+@token_required
+def listar_sesiones_por_usuario(current_user, user_id):
+    """
+    Devuelve las sesiones pendientes de un usuario específico incluyendo datos
+    del usuario y del ejercicio asociado en cada sesión. No restringe por rol,
+    solo requiere un token válido. Se incluyen únicamente sesiones sin
+    fecha_termino.
+    """
+    usuario = Usuario.query.get(user_id)
+    if not usuario:
+        return error_response("Usuario no encontrado", 404)
+
+    sesiones = []
+    for s in Sesion.query.filter_by(id_usuario=user_id).filter(Sesion.fecha_termino.is_(None)).all():
+        ejercicio = Ejercicio.query.get(s.id_ejercicio)
+
+        ses = s.json()
+        ses['usuario'] = usuario.json()
+        ses['ejercicio'] = ejercicio.json() if ejercicio else None
+
+        sesiones.append(ses)
+
+    return jsonify({"sesiones": sesiones}), 200
 
 
 if __name__ == '__main__':

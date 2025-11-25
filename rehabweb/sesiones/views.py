@@ -13,7 +13,7 @@ def sesion_list_view(request):
     sesiones = []
     try:
         sesiones = api_client.get_sesiones(token)
-        print(sesiones)
+        #print(sesiones)
     except Exception as exc:
         messages.error(request, 'Fallo al obtener las sesiones desde la API')
     return render(request, 'sesiones/list.html', {'sesiones': sesiones})
@@ -55,17 +55,19 @@ def create_view(request):
 @api_login_required
 def sesion_edit_view(request, sesion_id):
     """
-    Edit an exercise via external API.
-    GET: fetch exercise from API and show form.
+    Edit a sesion via external API.
+    GET: fetch sesion from API and show form.
     POST: submit updated data to API.
     """
     token = request.session.get('api_token')
     sesion = {}
     if request.method == 'POST':
-        
-        form = SesionAPIForm(request.POST)
+        form = SesionAPIForm(request.POST, token=token)
         if form.is_valid():
             payload = form.cleaned_data
+            
+            payload['id_ejercicio'] = str(payload['id_ejercicio'])
+            payload['id_usuario'] = str(payload['id_usuario'])
             try:
                 api_client.update_sesion(token, sesion_id, payload)
             except Exception as exc:
@@ -73,12 +75,12 @@ def sesion_edit_view(request, sesion_id):
                 form.add_error(None, str(exc))
             else:
                 messages.success(request, 'Sesión actualizada correctamente.')
-                return redirect(reverse('exercises:list'))
+                return redirect(reverse('sesiones:list'))
     else:
         try:
             data = api_client.get_sesion(token, sesion_id)
             data = data.get("sesion")
-            print(data , "-----------------")
+            #print(data , "-----------------")
         except Exception as exc:
             messages.error(request, 'No se pudo obtener la sesión: %s' % str(exc))
             return redirect(reverse('sesiones:list'))
@@ -89,7 +91,7 @@ def sesion_edit_view(request, sesion_id):
             'id_usuario': data.get('id_usuario'),  
             'id_ejercicio': data.get('id_ejercicio'),
         }
-        form = SesionAPIForm(initial=sesion)
+        form = SesionAPIForm(initial=sesion, token=token)
 
     return render(request, 'sesiones/edit.html', {'form': form, 'sesion': sesion})
 

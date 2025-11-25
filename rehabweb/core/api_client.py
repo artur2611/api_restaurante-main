@@ -91,7 +91,7 @@ def get_exercises(token, params=None):
                 if isinstance(v, list):
                     return v
             # If we detect a single ejercicio object, wrap it
-            if any(k in data for k in ('id', 'titulo', 'title', 'descripcion', 'description')):
+            if any(k in data for k in ('id', 'numero_ejercicio', 'descripcion', 'repeticiones_base', 'fecha_creacion')):
                 return [data]
             return []
         return []

@@ -70,6 +70,8 @@ class Sesion(db.Model):
     repeticiones_logradas = db.Column(db.Integer, nullable=False)
     maximo_nivel_logrado = db.Column(db.String(50))
 
+    fecha_termino = db.Column(db.DateTime, nullable=True)
+
     def json(self):
         return {
             "id": self.id,
@@ -77,5 +79,6 @@ class Sesion(db.Model):
             "id_ejercicio": self.id_ejercicio,
             "id_usuario": self.id_usuario,
             "repeticiones_logradas": self.repeticiones_logradas,
-            "maximo_nivel_logrado": self.maximo_nivel_logrado
+            "maximo_nivel_logrado": self.maximo_nivel_logrado,
+            "fecha_termino": str(self.fecha_termino) if self.fecha_termino else None
         }
