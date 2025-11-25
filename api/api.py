@@ -259,7 +259,7 @@ def crear_sesion(current_user):
     db.session.commit()
     return jsonify({"message": "Sesion creada", "sesion": s.json()}), 201
 
-@app.route('/sesiones/<string:s_id>', methods=['PUT'])
+@app.route('/sesiones/<s_id>', methods=['PUT'])
 @token_required
 def update_sesion(current_user, s_id):
     s = Sesion.query.get(s_id)

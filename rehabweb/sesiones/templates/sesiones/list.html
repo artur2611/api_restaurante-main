@@ -20,6 +20,8 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Fecha de Creacion</th>
+          <th scope="col">Maximo nivel logrado</th>
+          <th scope="col">Repeticiones logradas</th>
           <th scope="col" class="text-end">Acciones</th>
         </tr>
       </thead>
@@ -28,9 +30,11 @@
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ ex.fecha_creado|slice:":10" }}</td>
-            {% comment %} <td class="text-end">
+            <td>{{ ex.maximo_nivel_logrado }}</td>
+            <td>{{ ex.repeticiones_logradas }}</td>
+            <td class="text-end">
               <a
-                href="{% url 'exercises:edit' ex.id %}"
+                href="{% url 'sesiones:edit' ex.id %}"
                 class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
                 style="width:36px; height:34px;"
                 title="Editar"
@@ -38,10 +42,10 @@
               >
                 <i class="bi bi-pencil-fill"></i>
               </a>
-
+{% comment "" %} 
               <form method="post" 
               class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
-                {% csrf_token %}
+               {% csrf_token %}
                 <button
                   type="submit"
                   class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
@@ -52,7 +56,8 @@
                   <i class="bi bi-trash-fill"></i>
                 </button>
               </form>
-            </td> {% endcomment %}
+              {% endcomment %}
+            </td> 
           </tr>
         {% empty %}
           <tr>
@@ -63,10 +68,9 @@
     </table>
   </div>
 
-  <!-- BOTÓN PARA AÑADIR EJERCICIO (debajo de la tabla) -->
+  <!-- BOTÓN PARA AÑADIR SESIÓN (debajo de la tabla) -->
   <div class="mt-4 d-flex justify-content-end">
-    {% comment %} <a href="{% url 'exercises:create' %}" class="btn btn-success btn-lg"> {% endcomment %}
-    <a href="#" class="btn btn-success btn-lg">
+    <a href="{% url 'sesiones:create' %}" class="btn btn-success btn-lg">
       <i class="bi bi-plus-circle"></i> Añadir Sesiones
     </a>
   </div>

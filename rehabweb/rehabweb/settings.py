@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'exercises',
+    'sesiones',
 ]
 
 MIDDLEWARE = [
@@ -140,7 +141,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Flask API base URL (override with env var in production)
-FLASK_API_URL = os.environ.get('FLASK_API_URL', 'http:172.17.21.52:5000')
+FLASK_API_URL = os.environ.get('FLASK_API_URL', 'http://192.168.0.111:5000')
 
 # API client defaults
 API_CLIENT = {

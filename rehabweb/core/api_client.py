@@ -208,3 +208,30 @@ def get_sesiones(token, params=None):
         return []
     except RequestException as exc:
         raise ApiClientError('Error al obtener sesiones') from exc
+    
+    
+def create_sesion(token, payload):
+    try:
+        r = requests.post(_url('sesiones'), json=payload, headers=_headers(token), timeout=TIMEOUT)
+        r.raise_for_status()
+        return r.json()
+    except RequestException as exc:
+        raise ApiClientError('Failed to create sesión') from exc
+    
+def update_sesion(token, sesion_id, payload):
+    try:
+        print(_url(f'sesiones/{sesion_id}'), payload ,"++++++++++++++")
+        r = requests.put(_url(f'sesiones/{sesion_id}'), json=payload, headers=_headers(token), timeout=TIMEOUT)
+        r.raise_for_status()
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        return r.json()
+    except RequestException as exc:
+        raise ApiClientError('Failed to update sesión') from exc
+    
+def get_sesion(token, sesion_id):
+    try:
+        r = requests.get(_url(f'sesiones/{sesion_id}'), headers=_headers(token), timeout=TIMEOUT)
+        r.raise_for_status()
+        return r.json()
+    except RequestException as exc:
+        raise ApiClientError('Fallo al obtener la sesión') from exc

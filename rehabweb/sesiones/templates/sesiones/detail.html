@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ sesion.title }}</h1>
+  <p>{{ sesion.description }}</p>
+  <p><a href="{% url 'sesiones:list' %}">Back to list</a></p>
+{% endblock %}

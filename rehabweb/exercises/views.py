@@ -57,6 +57,7 @@ def edit_view(request, exercise_id):
     POST: submit updated data to API.
     """
     token = request.session.get('api_token')
+    exercise = {}
 
     if request.method == 'POST':
         form = ExerciseAPIForm(request.POST)

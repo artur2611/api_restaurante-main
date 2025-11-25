@@ -6,7 +6,7 @@ app_name = 'sesiones'
 
 urlpatterns = [
     path('', views.sesion_list_view, name='list'),
-    #path('sesiones/crear', views.create_view, name='create'),
-    #path('sesiones/<uuid:sesion_id>/', views.detail_view, name='detail'),
-    #path('sesiones/<uuid:sesion_id>/edit/', views.edit_view, name='edit'),
+    path('crear/', views.create_view, name='create'),
+    path('<uuid:sesion_id>/', views.detail_view, name='detail'),
+    path('<uuid:sesion_id>/edit/', views.sesion_edit_view, name='edit'),
 ]
