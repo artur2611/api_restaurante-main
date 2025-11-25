@@ -73,7 +73,7 @@ def sesion_edit_view(request, sesion_id):
                 form.add_error(None, str(exc))
             else:
                 messages.success(request, 'Sesión actualizada correctamente.')
-                return redirect(reverse('exercises:list'))
+                return redirect(reverse('sesiones:list'))
     else:
         try:
             data = api_client.get_sesion(token, sesion_id)
