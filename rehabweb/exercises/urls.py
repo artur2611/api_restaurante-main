@@ -10,4 +10,5 @@ urlpatterns = [
     path('create/', views.create_view, name='create'),
     path('<uuid:exercise_id>/', views.detail_view, name='detail'),
     path('<uuid:exercise_id>/edit/', views.edit_view, name='edit'),
+    path('<uuid:exercise_id>/delete/', views.delete_view, name='delete'),
 ]

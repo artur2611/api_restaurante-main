@@ -9,4 +9,5 @@ urlpatterns = [
     path('crear/', views.create_view, name='create'),
     path('<uuid:sesion_id>/', views.detail_view, name='detail'),
     path('<uuid:sesion_id>/edit/', views.sesion_edit_view, name='edit'),
+    path('<uuid:sesion_id>/delete/', views.delete_view, name='delete'),
 ]

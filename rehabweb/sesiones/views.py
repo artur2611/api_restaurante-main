@@ -28,6 +28,16 @@ def detail_view(request, sesion_id):
         return redirect(reverse('sesiones:list'))
     return render(request, 'sesiones/detail.html', {'sesion': sesion})
 
+@api_login_required
+def delete_view(request, sesion_id):
+    token = request.session.get('api_token')
+    try:
+        api_client.delete_sesion(token, sesion_id)
+        messages.success(request, 'Sesión eliminada correctamente.')
+    except Exception as exc:
+        messages.error(request, 'No se pudo eliminar la sesión: %s' % str(exc))
+    return redirect(reverse('sesiones:list'))
+
 
 @api_login_required
 def create_view(request):

@@ -37,17 +37,20 @@
             <td>{{ ex.dificultad }}</td>
             <td>{{ ex.fecha_creacion|slice:":10" }}</td>
             <td class="text-end">
-              <a
-                href="{% url 'exercises:edit' ex.id %}"
-                class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
-                style="width:36px; height:34px;"
-                title="Editar"
-                aria-label="Editar"
-              >
+
+                <a
+                  href="{% url 'exercises:edit' ex.id %}"
+                  class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
+                  style="width:36px; height:34px;"
+                  title="Editar"
+                  aria-label="Editar"
+                >
                 <i class="bi bi-pencil-fill"></i>
-              </a>
+                </a>
+              <!--Button for delete -->
 
               <form method="post" 
+              action="{% url 'exercises:delete' ex.id %}"
               class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
                 {% csrf_token %}
                 <button

@@ -235,3 +235,12 @@ def get_sesion(token, sesion_id):
         return r.json()
     except RequestException as exc:
         raise ApiClientError('Fallo al obtener la sesión') from exc
+    
+def delete_sesion(token, sesion_id):
+    try:
+        r = requests.delete(_url(f'sesiones/{sesion_id}'), headers=_headers(token), timeout=TIMEOUT)
+        if r.status_code not in (200, 204):
+            r.raise_for_status()
+        return True
+    except RequestException as exc:
+        raise ApiClientError('Fallo eliminar una sesion') from exc
