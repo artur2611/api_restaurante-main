@@ -20,8 +20,12 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Fecha de Creacion</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Ejercicio</th>
+          
           <th scope="col">Maximo nivel logrado</th>
           <th scope="col">Repeticiones logradas</th>
+          <th scope="col">Fecha de termino</th>
           <th scope="col" class="text-end">Acciones</th>
         </tr>
       </thead>
@@ -30,8 +34,17 @@
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ ex.fecha_creado|slice:":10" }}</td>
+            <td>{{ ex.usuario.nombre }}</td>
+            <td>{{ ex.ejercicio.descripcion }}</td>
             <td>{{ ex.maximo_nivel_logrado }}</td>
             <td>{{ ex.repeticiones_logradas }}</td>
+            <td>
+              {% if ex.fecha_termino %}
+                {{ ex.fecha_termino|slice:":10" }}
+              {% else %}
+                Sin completar
+              {% endif %}
+            </td>
             <td class="text-end">
               <a
                 href="{% url 'sesiones:edit' ex.id %}"

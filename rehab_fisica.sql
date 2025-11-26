@@ -30,3 +30,6 @@ CREATE TABLE sesion (
     repeticiones_logradas VARCHAR(200) NOT NULL,
     maximo_nivel_logrado VARCHAR(50)
 );
+
+ALTER TABLE sesion
+ADD COLUMN fecha_termino TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL;
