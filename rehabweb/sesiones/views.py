@@ -33,7 +33,7 @@ def detail_view(request, sesion_id):
 def create_view(request):
     token = request.session.get('api_token')
     if request.method == 'POST':
-        form = SesionAPIForm(request.POST)
+        form = SesionAPIForm(request.POST, token=token)
         if form.is_valid():
             payload = form.cleaned_data
             
@@ -48,7 +48,7 @@ def create_view(request):
                 messages.success(request, 'Sesión creada correctamente.')
                 return redirect(reverse('sesiones:list'))
     else:
-        form = SesionAPIForm()
+        form = SesionAPIForm(token=token)
     return render(request, 'sesiones/create.html', {'form': form})
 
 
