@@ -88,14 +88,14 @@ def register():
 def login_user(): 
     #print("HOLA")
     auth = request.authorization
-    #print(auth)   
+    print("##############auth",auth)   
     
 
     if not auth or not auth.username or not auth.password:  
         return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})    
 
     user = Usuario.query.filter_by(nombre=auth.username).first()
-    
+    print("##############",user)
         
     if check_password_hash(user.contrasena, auth.password):  
         token = jwt.encode({'id': user.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(days=1)}, app.config['SECRET_KEY'])  
