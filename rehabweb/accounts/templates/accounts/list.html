@@ -1,0 +1,95 @@
+{% extends 'base_regular.html' %}
+
+{% block content %}
+<!-- Forzar contenido en la parte superior (anula el centrado de .wr-content-center solo en esta página) -->
+<style>
+  .wr-content-center { align-items: flex-start !important; padding-top: 1.5rem; }
+</style>
+
+<div class="container py-4">
+
+  <!-- TÍTULO A TODO EL ANCHO -->
+  <div class="w-100 bg-primary text-white py-3 px-4 mb-4 rounded">
+    <h1 class="h3 m-0">Usuarios</h1>
+  </div>
+
+  <!-- TABLA A TODO EL ANCHO -->
+  <div class="table-responsive w-100">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Telefono</th>
+          <th scope="col">Fecha de nacimiento</th>
+          <th scope="col">Rol</th>
+          
+          <th scope="col" class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ex in users %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ ex.nombre }}</td>
+            <td>{{ ex.telefono }}</td>
+            <td>{{ex.fecha_nacimiento }}</td>
+            <td>{{ex.rol }}</td>
+            <td class="text-end">
+            {% comment %} {{ex.id}} {% endcomment %}
+                <a
+                  href="{% url 'accounts:edit' ex.id %}" 
+                  class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
+                  style="width:36px; height:34px;"
+                  title="Editar"
+                  aria-label="Editar"
+                >
+                <i class="bi bi-pencil-fill"></i>
+                </a>
+              <!--Button for delete -->
+{% comment "" %}
+              <a
+                href="{% url 'accounts:delete' ex.id %}"
+                class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
+                style="width:36px; height:34px;"
+                title="Eliminar"
+                aria-label="Eliminar"
+                onclick="console.log('ID: {{ ex.id }}'); return confirm('¿Eliminar usuario?');"
+              >
+                <i class="bi bi-trash-fill"></i>
+              </a>
+              <form method="post" 
+              action="{% url 'accounts:delete' ex.id %}"
+              class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
+                  style="width:36px; height:34px;"
+                  title="Eliminar"
+                  aria-label="Eliminar"
+                >
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </form>
+              {% endcomment %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center">No users yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  
+  <!-- BOTÓN PARA AÑADIR Usuario (debajo de la tabla) -->
+  <div class="mt-4 d-flex justify-content-end">
+    <a  class="btn btn-success btn-lg">
+      <i class="bi bi-plus-circle"></i> Añadir Ejercicio
+    </a>
+  </div>
+{% endblock content %}
+</div>

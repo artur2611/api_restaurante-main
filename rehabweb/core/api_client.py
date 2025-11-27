@@ -146,6 +146,7 @@ def get_users(token, params=None):
         raise ApiClientError('Failed to fetch usuarios') from exc
 
 
+
 def get_user(token, user_id):
     try:
         r = requests.get(_url(f'usuarios/{user_id}'), headers=_headers(token), timeout=TIMEOUT)

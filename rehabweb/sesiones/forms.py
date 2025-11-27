@@ -13,6 +13,7 @@ class SesionAPIForm(forms.Form):
         try:
             # Obtener lista de usuarios
             usuarios_data = api_client.get_users(token=token)
+            print("USUARIOS", usuarios_data)
             #print(usuarios_data, "Se obtuvieron los usuarios")
             for user in usuarios_data.get('usuarios', []):
                 # Mostrar nombre pero guardar id
