@@ -47,23 +47,14 @@
                 <i class="bi bi-pencil-fill"></i>
                 </a>
               <!--Button for delete -->
-{% comment "" %}
-              <a
-                href="{% url 'accounts:delete' ex.id %}"
-                class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
-                style="width:36px; height:34px;"
-                title="Eliminar"
-                aria-label="Eliminar"
-                onclick="console.log('ID: {{ ex.id }}'); return confirm('¿Eliminar usuario?');"
-              >
-                <i class="bi bi-trash-fill"></i>
-              </a>
+
               <form method="post" 
               action="{% url 'accounts:delete' ex.id %}"
-              class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
-                {% csrf_token %}
+              class="d-inline-block" onsubmit="return confirm('¿Eliminar usuario?');">
+               {% csrf_token %}
                 <button
                   type="submit"
+                  
                   class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
                   style="width:36px; height:34px;"
                   title="Eliminar"
@@ -72,7 +63,7 @@
                   <i class="bi bi-trash-fill"></i>
                 </button>
               </form>
-              {% endcomment %}
+
             </td>
           </tr>
         {% empty %}
@@ -87,8 +78,8 @@
   
   <!-- BOTÓN PARA AÑADIR Usuario (debajo de la tabla) -->
   <div class="mt-4 d-flex justify-content-end">
-    <a  class="btn btn-success btn-lg">
-      <i class="bi bi-plus-circle"></i> Añadir Ejercicio
+    <a href="{% url 'accounts:signup' %}" class="btn btn-success btn-lg">
+      <i class="bi bi-plus-circle"></i> Añadir Usuario
     </a>
   </div>
 {% endblock content %}

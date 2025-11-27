@@ -52,6 +52,26 @@ class SignupForm(forms.Form):
     )
     
 class UserAPIForm(forms.Form):
+
+    def __init__(self, *args, token=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.token = token
+        
+        # Obtener usuarios y ejercicios de la API
+        
+        roles_choices = [('', '-- Selecciona un ROL --') , ('paciente', 'Paciente'), ('terapeuta', 'Terapeuta'), ('admin', 'Administrador')]
+        
+        
+        # Actualizar los fields con las opciones dinámicas
+        self.fields['rol'] = forms.ChoiceField(
+            label='Rol de usuario',
+            choices=roles_choices,
+            widget=forms.Select(attrs={'class': 'form-select'}),
+            required=True
+        )
+        
+        
+        
     nombre = forms.CharField(
         max_length=150,
         required=True,
@@ -71,7 +91,12 @@ class UserAPIForm(forms.Form):
         })
     )
 
-    rol = forms.CharField(
+    # rol = forms.CharField(
+        # required=False,
+        # widget=forms.TextInput(attrs={'class': 'form-control'})
+    # )
+    
+    contrasena = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )

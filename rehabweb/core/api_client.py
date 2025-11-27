@@ -107,7 +107,7 @@ def get_exercise(token, exercise_id):
     except RequestException as exc:
         raise ApiClientError('Fallo al obtener el ejercicio') from exc
 
-
+#apii lista solo faltan validaciones
 def create_exercise(token, payload):
     try:
         r = requests.post(_url('ejercicios'), json=payload, headers=_headers(token), timeout=TIMEOUT)
@@ -156,9 +156,9 @@ def get_user(token, user_id):
         raise ApiClientError('Failed to fetch usuario') from exc
 
 
-def create_user_public(payload):
+def create_user(token, payload):
     try:
-        r = requests.post(_url('usuarios'), json=payload, timeout=TIMEOUT)
+        r = requests.post(_url('usuarios'), json=payload, headers=_headers(token), timeout=TIMEOUT)
         r.raise_for_status()
         return r.json()
     except RequestException as exc:
