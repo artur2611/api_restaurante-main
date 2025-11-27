@@ -61,7 +61,7 @@ def register():
     nombre = data.get('nombre')
     telefono = data.get('telefono')
     fecha_nacimiento = data.get('fecha_nacimiento')  
-    rol = data.get('rol', 'usuario')
+    rol = data.get('rol', 'paciente')
     contrasena = data.get('contrasena')
 
     if not nombre or not contrasena:
@@ -69,15 +69,19 @@ def register():
 
     if telefono and Usuario.query.filter_by(telefono=telefono).first():
         return error_response("Telefono ya registrado", 400)
-    contrasena_hash=generate_password_hash(contrasena),
     new_user = Usuario(
+        
         id=str(uuid.uuid4()),
         nombre=nombre,
         fecha_nacimiento=fecha_nacimiento,
         telefono=telefono,
         rol=rol,
-        contrasena=contrasena_hash,
+        # contrasena=contrasena_hash,
+        
     )
+    if contrasena is not None or contrasena.strip() != "":
+        contrasena_hash=generate_password_hash(contrasena)
+        new_user.contrasena=contrasena_hash
     db.session.add(new_user)
     db.session.commit()
 
@@ -135,8 +139,9 @@ def update_usuario(current_user, user_id):
         usuario.fecha_nacimiento = data.get('fecha_nacimiento')
     usuario.telefono = data.get('telefono', usuario.telefono)
     usuario.rol = data.get('rol', usuario.rol)
-    if data.get('password'):
-        usuario.password_hash = generate_password_hash(data.get('password'))
+    print(data)
+    if data.get('contrasena'):
+        usuario.contrasena = generate_password_hash(data.get('contrasena'))
     db.session.commit()
     return jsonify({"message": "Usuario actualizado", "usuario": usuario.json()}), 200
 

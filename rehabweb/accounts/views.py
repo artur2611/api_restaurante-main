@@ -172,7 +172,7 @@ def signup_view(request):
                 form.add_error(None, str(exc))
             else:
                 messages.success(request, 'Cuenta creada correctamente, ahora inicia sesión')
-                return redirect(reverse('accounts:login'))
+                return redirect(reverse('accounts:list'))
     else:
         form = SignupForm()
 
