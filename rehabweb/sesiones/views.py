@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 
-from core.decorators import api_login_required
+from core.decorators import api_login_required, bloquear_pacientes, bloquear_terapeutas
 from core import api_client
 from .forms import SesionAPIForm
 
@@ -13,10 +13,25 @@ def sesion_list_view(request):
     sesiones = []
     try:
         sesiones = api_client.get_sesiones(token)
+        print("SESIONES EN LA VISTA LISTA:", sesiones)
+        print("##################################")
         #print(sesiones)
     except Exception as exc:
         messages.error(request, 'Fallo al obtener las sesiones desde la API')
     return render(request, 'sesiones/list.html', {'sesiones': sesiones})
+
+@api_login_required
+def sesiones_por_usuario(request, user_id):
+    print("USER ID EN LA VISTA SESIONES POR USUARIO:", user_id)
+    token = request.session.get('api_token')
+    sesiones = []
+    try:
+        sesiones = api_client.get_sesion_by_user(token, user_id)
+        #print(sesiones)
+    except Exception as exc:
+        messages.error(request, 'Fallo al obtener las sesiones desde la API')
+    return render(request, 'sesiones/list.html', {'sesiones': sesiones.get("sesiones", [])})
+
 
 @api_login_required
 def detail_view(request, sesion_id):

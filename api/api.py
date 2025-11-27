@@ -320,6 +320,7 @@ def listar_sesiones_por_usuario(current_user, user_id):
     solo requiere un token válido. Se incluyen únicamente sesiones sin
     fecha_termino.
     """
+    #print("USER ID EN LA API:", user_id)
     usuario = Usuario.query.get(user_id)
     if not usuario:
         return error_response("Usuario no encontrado", 404)
@@ -331,8 +332,8 @@ def listar_sesiones_por_usuario(current_user, user_id):
         ses = s.json()
         ses['usuario'] = usuario.json()
         ses['ejercicio'] = ejercicio.json() if ejercicio else None
-
         sesiones.append(ses)
+    #print("SESION CON DATOS COMPLETOS:", sesiones)
 
     return jsonify({"sesiones": sesiones}), 200
 

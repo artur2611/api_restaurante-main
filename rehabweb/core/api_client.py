@@ -209,7 +209,15 @@ def get_sesiones(token, params=None):
         return []
     except RequestException as exc:
         raise ApiClientError('Error al obtener sesiones') from exc
-    
+
+def get_sesion_by_user(token, user_id):
+    try:
+        r = requests.get(_url(f'sesiones/usuario/{user_id}'), headers=_headers(token), timeout=TIMEOUT)
+        r.raise_for_status()
+        return r.json()
+    except RequestException as exc:
+        raise ApiClientError('Fallo al obtener las sesiones del usuario') from exc
+ 
     
 def create_sesion(token, payload):
     try:

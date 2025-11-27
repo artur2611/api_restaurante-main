@@ -147,10 +147,12 @@ def login_view(request):
                 form.add_error(None, str(exc))
             else:
                 token = data.get('token') or data.get('access_token')
-                user = data.get('user')
+                user = api_client.get_user(token, data.get('id'))
+                user = user.get('usuario')
+                user = {'id': user.get('id'), 'rol': user.get('rol')}               # user = data.get('usuario')
                 request.session['api_token'] = token
-                request.session['api_user'] = user
-                return redirect(reverse('exercises:list'))
+                request.session['user'] = user
+                return redirect(reverse('exercises:home'))
     else:
         form = LoginForm()
     return render(request, 'accounts/login.html', {'form': form})
