@@ -77,6 +77,62 @@ def edit_user_view(request, user_id):
         'form': form,
         'user': user
     })
+    
+    
+    
+@api_login_required
+def create_view(request):
+    """
+    Crear nuevo usuario vía API externa.
+    GET: muestra formulario vacío.
+    POST: envía datos a la API para crear usuario.
+    """
+    token = request.session.get('api_token')
+    
+    if request.method == 'POST':
+        form = UserAPIForm(request.POST)
+        if form.is_valid():
+            print("peyload para testear las respuestas de la api ", form.cleaned_data)
+            payload = form.cleaned_data
+            
+            if payload.get('fecha_nacimiento'):
+                payload['fecha_nacimiento'] = str(payload['fecha_nacimiento'])
+            
+            if not payload.get('contrasena'):
+                messages.error(request, 'La contraseña es requerida')
+                form.add_error('contrasena', 'La contraseña es requerida')
+                return render(request, 'accounts/create.html', {
+                    'form': form
+                })
+                
+            try:
+                print("Payload para crear usuario:", payload)
+                
+                api_client.create_user(token, payload)
+            except Exception as exc:
+                messages.error(request, f'No se pudo crear el usuario: {exc}')
+                form.add_error(None, str(exc))
+            else:
+                messages.success(request, 'Usuario creado correctamente.')
+                return redirect(reverse('accounts:list'))
+    else:
+        form = UserAPIForm()
+
+    return render(request, 'accounts/create.html', {
+        'form': form
+    })
+    
+
+@api_login_required
+def delete_view(request, user_id):
+    token = request.session.get('api_token')
+    try:
+        api_client.delete_user(token, user_id)
+        messages.success(request, 'Usuario eliminado correctamente.')
+    except Exception as exc:
+        messages.error(request, f'No se pudo eliminar el usuario: {str(exc)}')
+    return redirect(reverse('accounts:list'))
+
 
 
 

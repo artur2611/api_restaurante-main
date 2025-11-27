@@ -10,5 +10,8 @@ urlpatterns = [
     path('', views.users_list_view, name='list'),
     path('<uuid:user_id>/', views.detail_view, name='detail'),
     path('<uuid:user_id>/edit/', views.edit_user_view, name='edit'),
+    path('create/', views.create_view, name='create'),
+    path('<uuid:user_id>/delete/', views.delete_view, name='delete'),
+    
     
 ]

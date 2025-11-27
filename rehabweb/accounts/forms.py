@@ -75,3 +75,8 @@ class UserAPIForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
+    
+    contrasena = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
