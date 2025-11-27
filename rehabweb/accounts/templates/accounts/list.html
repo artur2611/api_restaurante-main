@@ -10,7 +10,7 @@
 
   <!-- TÍTULO A TODO EL ANCHO -->
   <div class="w-100 bg-primary text-white py-3 px-4 mb-4 rounded">
-    <h1 class="h3 m-0">Ejercicios</h1>
+    <h1 class="h3 m-0">Usuarios</h1>
   </div>
 
   <!-- TABLA A TODO EL ANCHO -->
@@ -19,27 +19,26 @@
       <thead class="table-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Numero de ejercicio</th>
-          <th scope="col">Repeticiones</th>
-          <th scope="col">Dificultad</th>
-          <th scope="col">Fecha de Creación</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Telefono</th>
+          <th scope="col">Fecha de nacimiento</th>
+          <th scope="col">Rol</th>
+          
           <th scope="col" class="text-end">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {% for ex in exercises %}
+        {% for ex in users %}
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ ex.descripcion }}</td>
-            <td>{{ ex.numero_ejercicio }}</td>
-            <td>{{ ex.repeticiones_base }}</td>
-            <td>{{ ex.dificultad }}</td>
-            <td>{{ ex.fecha_creacion|slice:":10" }}</td>
+            <td>{{ ex.nombre }}</td>
+            <td>{{ ex.telefono }}</td>
+            <td>{{ex.fecha_nacimiento }}</td>
+            <td>{{ex.rol }}</td>
             <td class="text-end">
-
+            {% comment %} {{ex.id}} {% endcomment %}
                 <a
-                  href="{% url 'exercises:edit' ex.id %}"
+                  href="{% url 'accounts:edit' ex.id %}" 
                   class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
                   style="width:36px; height:34px;"
                   title="Editar"
@@ -48,9 +47,19 @@
                 <i class="bi bi-pencil-fill"></i>
                 </a>
               <!--Button for delete -->
-
+{% comment "" %}
+              <a
+                href="{% url 'accounts:delete' ex.id %}"
+                class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
+                style="width:36px; height:34px;"
+                title="Eliminar"
+                aria-label="Eliminar"
+                onclick="console.log('ID: {{ ex.id }}'); return confirm('¿Eliminar usuario?');"
+              >
+                <i class="bi bi-trash-fill"></i>
+              </a>
               <form method="post" 
-              action="{% url 'exercises:delete' ex.id %}"
+              action="{% url 'accounts:delete' ex.id %}"
               class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
                 {% csrf_token %}
                 <button
@@ -63,24 +72,24 @@
                   <i class="bi bi-trash-fill"></i>
                 </button>
               </form>
+              {% endcomment %}
             </td>
           </tr>
         {% empty %}
           <tr>
-            <td colspan="7" class="text-center">No exercises yet.</td>
+            <td colspan="7" class="text-center">No users yet.</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-  <!-- BOTÓN PARA AÑADIR EJERCICIO (debajo de la tabla) -->
+  
+  <!-- BOTÓN PARA AÑADIR Usuario (debajo de la tabla) -->
   <div class="mt-4 d-flex justify-content-end">
-    <a href="{% url 'exercises:create' %}" class="btn btn-success btn-lg">
+    <a  class="btn btn-success btn-lg">
       <i class="bi bi-plus-circle"></i> Añadir Ejercicio
     </a>
   </div>
-
+{% endblock content %}
 </div>
-
-{% endblock %}

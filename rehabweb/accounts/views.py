@@ -2,8 +2,82 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 
+from core.decorators import api_login_required
+from core import api_client
 from .forms import LoginForm, SignupForm
 from core import api_client
+from .forms import UserAPIForm
+
+@api_login_required
+def users_list_view(request):
+    token = request.session.get('api_token')
+    try:
+        users = api_client.get_users(token)
+        users = users.get('usuarios', [])
+        print("USUARIOS EN LA VISTA LISTA:", users)
+    except Exception as exc:
+        messages.error(request, 'Failed to retrieve users from API.')
+        users = []
+    return render(request, 'accounts/list.html', {'users': users})
+
+@api_login_required
+def detail_view(request, user_id):
+    token = request.session.get('api_token')
+    try:
+        user = api_client.get_user(token, user_id)
+    except Exception:
+        messages.error(request, 'Failed to load user')
+        return redirect(reverse('accounts:list'))
+    return render(request, 'accounts/detail.html', {'user': user})
+
+@api_login_required
+def edit_user_view(request, user_id):
+    """
+    Editar usuario vía API externa.
+    GET: obtiene usuario y muestra formulario.
+    POST: envía datos actualizados a la API.
+    """
+    token = request.session.get('api_token')
+    user = {}
+    
+    if request.method == 'POST':
+        form = UserAPIForm(request.POST)
+        if form.is_valid():
+            payload = form.cleaned_data
+            try:
+                print("Payload para actualizar usuario:", payload)
+                payload['fecha_nacimiento'] = str(payload['fecha_nacimiento'])
+                api_client.update_user(token, user_id, payload)
+            except Exception as exc:
+                messages.error(request, f'No se pudo actualizar el usuario: {exc}')
+                form.add_error(None, str(exc))
+            else:
+                messages.success(request, 'Usuario actualizado correctamente.')
+                return redirect(reverse('accounts:list'))
+    else:
+        try:
+            data = api_client.get_user(token, user_id)
+            print("Datos del usuario obtenido de la API:", data)
+        except Exception as exc:
+            messages.error(request, f'No se pudo obtener el usuario: {exc}')
+            return redirect(reverse('accounts:list'))
+
+        # Mapear datos de la API → formulario
+        data = data.get ('usuario')
+        user = {
+            'nombre': data.get('nombre', ''),
+            'telefono': data.get('telefono', ''),
+            'fecha_nacimiento': data.get('fecha_nacimiento'),
+            'rol': data.get('rol', ''),
+        }
+        print(user)
+        form = UserAPIForm(initial=user)
+
+    return render(request, 'accounts/edit.html', {
+        'form': form,
+        'user': user
+    })
+
 
 
 def login_view(request):
@@ -54,3 +128,4 @@ def logout_view(request):
     request.session.pop('api_token', None)
     request.session.pop('api_user', None)
     return redirect(reverse('accounts:login'))
+

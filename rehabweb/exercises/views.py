@@ -29,6 +29,20 @@ def detail_view(request, exercise_id):
         return redirect(reverse('exercises:list'))
     return render(request, 'exercises/detail.html', {'exercise': exercise})
 
+@api_login_required
+def delete_view(request, exercise_id):
+    token = request.session.get('api_token')
+    if request.method == 'POST':
+        try:
+            api_client.delete_exercise(token, exercise_id)
+        except Exception as exc:
+            messages.error(request, 'No se pudo eliminar el ejercicio: %s' % str(exc))
+        else:
+            messages.success(request, 'Ejercicio eliminado correctamente.')
+        return redirect(reverse('exercises:list'))
+    else:
+        return render(request, 'exercises/delete.html', {'exercise_id': exercise_id})
+
 
 @api_login_required
 def create_view(request):

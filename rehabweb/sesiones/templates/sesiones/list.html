@@ -46,6 +46,7 @@
               {% endif %}
             </td>
             <td class="text-end">
+              <div class="d-inline-flex">
               <a
                 href="{% url 'sesiones:edit' ex.id %}"
                 class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
@@ -55,12 +56,16 @@
               >
                 <i class="bi bi-pencil-fill"></i>
               </a>
-{% comment "" %} 
+              <!--Button for delete -->
+
+
               <form method="post" 
-              class="d-inline-block" onsubmit="return confirm('¿Eliminar ejercicio?');">
+              action="{% url 'sesiones:delete' ex.id %}"
+              class="d-inline-block" onsubmit="return confirm('¿Eliminar sesión?');">
                {% csrf_token %}
                 <button
                   type="submit"
+                  
                   class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
                   style="width:36px; height:34px;"
                   title="Eliminar"
@@ -69,7 +74,7 @@
                   <i class="bi bi-trash-fill"></i>
                 </button>
               </form>
-              {% endcomment %}
+              </div>
             </td> 
           </tr>
         {% empty %}
