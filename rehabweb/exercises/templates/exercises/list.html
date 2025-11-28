@@ -24,7 +24,9 @@
           <th scope="col">Repeticiones</th>
           <th scope="col">Dificultad</th>
           <th scope="col">Fecha de Creación</th>
+          {% if request.session.user.rol != "terapeuta" %}
           <th scope="col" class="text-end">Acciones</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -36,6 +38,7 @@
             <td>{{ ex.repeticiones_base }}</td>
             <td>{{ ex.dificultad }}</td>
             <td>{{ ex.fecha_creacion|slice:":10" }}</td>
+            {% if request.session.user.rol != "terapeuta" %}
             <td class="text-end">
 
                 <a
@@ -64,7 +67,9 @@
                 </button>
               </form>
             </td>
+          {% endif %}
           </tr>
+        
         {% empty %}
           <tr>
             <td colspan="7" class="text-center">No exercises yet.</td>
@@ -73,14 +78,14 @@
       </tbody>
     </table>
   </div>
-
+  {% if request.session.user.rol != "terapeuta" %}
   <!-- BOTÓN PARA AÑADIR EJERCICIO (debajo de la tabla) -->
   <div class="mt-4 d-flex justify-content-end">
     <a href="{% url 'exercises:create' %}" class="btn btn-success btn-lg">
       <i class="bi bi-plus-circle"></i> Añadir Ejercicio
     </a>
   </div>
-
+  {% endif %}
 </div>
 
 {% endblock %}

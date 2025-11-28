@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 
-from core.decorators import api_login_required
+from core.decorators import api_login_required , bloquear_pacientes, bloquear_terapeutas
 from core import api_client
 from .forms import ExerciseAPIForm
 from core import api_client
 
 
 @api_login_required
+@bloquear_pacientes
 def list_view(request):
     token = request.session.get('api_token')
     exercises = []
@@ -19,7 +20,9 @@ def list_view(request):
     return render(request, 'exercises/list.html', {'exercises': exercises})
 
 
-@api_login_required
+@api_login_required 
+@bloquear_pacientes
+@bloquear_terapeutas
 def detail_view(request, exercise_id):
     token = request.session.get('api_token')
     try:
@@ -30,6 +33,8 @@ def detail_view(request, exercise_id):
     return render(request, 'exercises/detail.html', {'exercise': exercise})
 
 @api_login_required
+@bloquear_pacientes
+@bloquear_terapeutas
 def delete_view(request, exercise_id):
     token = request.session.get('api_token')
     if request.method == 'POST':
@@ -45,6 +50,8 @@ def delete_view(request, exercise_id):
 
 
 @api_login_required
+@bloquear_pacientes
+@bloquear_terapeutas
 def create_view(request):
     token = request.session.get('api_token')
     if request.method == 'POST':
@@ -64,6 +71,8 @@ def create_view(request):
     return render(request, 'exercises/create.html', {'form': form})
 
 @api_login_required
+@bloquear_pacientes
+@bloquear_terapeutas
 def edit_view(request, exercise_id):
     """
     Edit an exercise via external API.
