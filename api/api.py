@@ -298,6 +298,14 @@ def update_sesion(current_user, s_id):
     s.repeticiones_logradas = data.get('repeticiones_logradas', s.repeticiones_logradas)
     s.maximo_nivel_logrado = data.get('maximo_nivel_logrado', s.maximo_nivel_logrado)
     s.fecha_termino = data.get('fecha_termino', s.fecha_termino)
+    
+    # generacion de fecha_termino si se cumplen las condiciones
+    ejercicio = Ejercicio.query.get(s.id_ejercicio)
+    repeticiones_base = getattr(ejercicio, 'repeticiones_base', 0)
+    
+    if s.repeticiones_logradas >= repeticiones_base and repeticiones_base > 0:
+        s.fecha_termino = datetime.datetime.now()
+    
     db.session.commit()
     return jsonify({"message": "Sesion actualizada", "sesion": s.json()}), 200
 

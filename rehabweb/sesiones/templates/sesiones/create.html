@@ -25,7 +25,7 @@
 
 <div class="container py-4">
   <h1 class="h4 mb-3">Crear nueva sesión</h1>
-
+  {%if request.session.user.rol != 'paciente'%}
   <form method="post" novalidate>
     {% csrf_token %}
     <div class="card p-3">
@@ -44,5 +44,7 @@
       </div>
     </div>
   </form>
+  
+  {% endif %}
 </div>
 {% endblock %}

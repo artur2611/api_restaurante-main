@@ -23,7 +23,6 @@
           <th scope="col">Telefono</th>
           <th scope="col">Fecha de nacimiento</th>
           <th scope="col">Rol</th>
-          
           <th scope="col" class="text-end">Acciones</th>
         </tr>
       </thead>
@@ -33,40 +32,36 @@
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ ex.nombre }}</td>
             <td>{{ ex.telefono }}</td>
-            <td>{{ex.fecha_nacimiento }}</td>
-            <td>{{ex.rol }}</td>
+            <td>{{ ex.fecha_nacimiento }}</td>
+            <td>{{ ex.rol }}</td>
             <td class="text-end">
-            {% comment %} {{ex.id}} {% endcomment %}
-                <a
-                  href="{% url 'accounts:edit' ex.id %}" 
-                  class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
-                  style="width:36px; height:34px;"
-                  title="Editar"
-                  aria-label="Editar"
-                >
-                <i class="bi bi-pencil-fill"></i>
+              {% if request.session.user.rol != "paciente" %}
+                <!-- Botón Editar -->
+                <a href="{% url 'accounts:edit' ex.id %}" 
+                   class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
+                   style="width:36px; height:34px;"
+                   title="Editar"
+                   aria-label="Editar">
+                  <i class="bi bi-pencil-fill"></i>
                 </a>
-              <!--Button for delete -->
 
-              <form method="post" 
-              action="{% url 'accounts:delete' ex.id %}"
-              class="d-inline-block" onsubmit="return confirm('¿Eliminar usuario?');">
-               {% csrf_token %}
-                <button
-                  type="submit"
-                  
-                  class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
-                  style="width:36px; height:34px;"
-                  title="Eliminar"
-                  aria-label="Eliminar"
-                >
-                  <i class="bi bi-trash-fill"></i>
-                </button>
-              </form>
-
+                <!-- Botón Eliminar -->
+                <form method="post" 
+                      action="{% url 'accounts:delete' ex.id %}"
+                      class="d-inline-block" onsubmit="return confirm('¿Eliminar usuario?');">
+                  {% csrf_token %}
+                  <button type="submit"
+                          class="btn btn-danger btn-sm d-inline-flex align-items-center justify-content-center"
+                          style="width:36px; height:34px;"
+                          title="Eliminar"
+                          aria-label="Eliminar">
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
+                </form>
+              {% endif %}
             </td>
           </tr>
-        {% empty %}
+        {% empty %} 
           <tr>
             <td colspan="7" class="text-center">No users yet.</td>
           </tr>
@@ -75,12 +70,14 @@
     </table>
   </div>
 
-  
   <!-- BOTÓN PARA AÑADIR Usuario (debajo de la tabla) -->
+  {% if request.session.user.rol != "paciente" %}
   <div class="mt-4 d-flex justify-content-end">
     <a href="{% url 'accounts:signup' %}" class="btn btn-success btn-lg">
       <i class="bi bi-plus-circle"></i> Añadir Usuario
     </a>
   </div>
-{% endblock content %}
+  {% endif %}
+
 </div>
+{% endblock content %}

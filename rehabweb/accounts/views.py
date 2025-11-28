@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 
-from core.decorators import api_login_required
+from core.decorators import api_login_required, bloquear_pacientes
 from core import api_client
 from .forms import LoginForm, SignupForm
 from core import api_client
 from .forms import UserAPIForm
 
 @api_login_required
+@bloquear_pacientes
 def users_list_view(request):
     token = request.session.get('api_token')
     try:
@@ -21,6 +22,7 @@ def users_list_view(request):
     return render(request, 'accounts/list.html', {'users': users})
 
 @api_login_required
+@bloquear_pacientes
 def detail_view(request, user_id):
     token = request.session.get('api_token')
     try:
@@ -31,6 +33,7 @@ def detail_view(request, user_id):
     return render(request, 'accounts/detail.html', {'user': user})
 
 @api_login_required
+@bloquear_pacientes 
 def edit_user_view(request, user_id):
     """
     Editar usuario vía API externa.
@@ -81,6 +84,7 @@ def edit_user_view(request, user_id):
     
     
 @api_login_required
+@bloquear_pacientes
 def create_view(request):
     """
     Crear nuevo usuario vía API externa.
@@ -124,6 +128,7 @@ def create_view(request):
     
 
 @api_login_required
+@bloquear_pacientes
 def delete_view(request, user_id):
     token = request.session.get('api_token')
     try:

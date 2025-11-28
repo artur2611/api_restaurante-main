@@ -26,7 +26,9 @@
           <th scope="col">Maximo nivel logrado</th>
           <th scope="col">Repeticiones logradas</th>
           <th scope="col">Fecha de termino</th>
+          {% if request.session.user.rol != "paciente" %}
           <th scope="col" class="text-end">Acciones</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -45,8 +47,10 @@
                 Sin completar
               {% endif %}
             </td>
+            {% if request.session.user.rol != "paciente" %}
             <td class="text-end">
               <div class="d-inline-flex">
+             
               <a
                 href="{% url 'sesiones:edit' ex.id %}"
                 class="btn btn-warning btn-sm me-1 d-inline-flex align-items-center justify-content-center"
@@ -56,8 +60,8 @@
               >
                 <i class="bi bi-pencil-fill"></i>
               </a>
+              
               <!--Button for delete -->
-
 
               <form method="post" 
               action="{% url 'sesiones:delete' ex.id %}"
@@ -74,8 +78,10 @@
                   <i class="bi bi-trash-fill"></i>
                 </button>
               </form>
+            
               </div>
-            </td> 
+            </td>
+            {% endif %} 
           </tr>
         {% empty %}
           <tr>
@@ -87,12 +93,13 @@
   </div>
 
   <!-- BOTÓN PARA AÑADIR SESIÓN (debajo de la tabla) -->
+  {% if request.session.user.rol != "paciente" %}
   <div class="mt-4 d-flex justify-content-end">
     <a href="{% url 'sesiones:create' %}" class="btn btn-success btn-lg">
       <i class="bi bi-plus-circle"></i> Añadir Sesiones
     </a>
   </div>
-
+  {% endif %}
 </div>
 
 {% endblock %}

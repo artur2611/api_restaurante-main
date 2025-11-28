@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -7,7 +8,7 @@ from core import api_client
 from .forms import SesionAPIForm
 
 
-@api_login_required
+@api_login_required 
 def sesion_list_view(request):
     token = request.session.get('api_token')
     sesiones = []
@@ -34,12 +35,13 @@ def sesiones_por_usuario(request, user_id):
 
 
 @api_login_required
+@bloquear_pacientes
 def detail_view(request, sesion_id):
     token = request.session.get('api_token')
     try:
         sesion = api_client.get_sesion(token, sesion_id)
     except Exception:
-        messages.error(request, 'Failed to load exercise')
+        messages.error(request, 'Failed to load sesion ')
         return redirect(reverse('sesiones:list'))
     return render(request, 'sesiones/detail.html', {'sesion': sesion})
 
@@ -93,6 +95,13 @@ def sesion_edit_view(request, sesion_id):
             
             payload['id_ejercicio'] = str(payload['id_ejercicio'])
             payload['id_usuario'] = str(payload['id_usuario'])
+            
+            repeticiones_logradas = payload.get('repeticiones_logradas',0)
+            repeticiones_base = int(payload.get('repeticiones_base',0))
+            
+            if repeticiones_logradas >= repeticiones_base and repeticiones_base >  0:
+                payload['fecha_terminado'] = datetime.now().isoformat()
+            
             try:
                 api_client.update_sesion(token, sesion_id, payload)
             except Exception as exc:
@@ -115,6 +124,7 @@ def sesion_edit_view(request, sesion_id):
             'repeticiones_logradas': data.get('repeticiones_logradas'),
             'id_usuario': data.get('id_usuario'),  
             'id_ejercicio': data.get('id_ejercicio'),
+            'repeticiones_base': data.get('repeticiones_base', 0)
         }
         form = SesionAPIForm(initial=sesion, token=token)
 
