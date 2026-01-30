@@ -141,7 +141,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Flask API base URL (override with env var in production)
-FLASK_API_URL = os.environ.get('FLASK_API_URL', 'http://192.168.0.111:5000')
+FLASK_API_URL = os.environ.get('FLASK_API_URL', ' https://patronising-auriferous-del.ngrok-free.dev')
 
 # API client defaults
 API_CLIENT = {

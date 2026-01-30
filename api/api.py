@@ -7,17 +7,20 @@ from functools import wraps
 import uuid
 import jwt
 import datetime
+import os
 
 def create_app(environment):
     app = Flask(__name__)
     CORS(app)
     app.config.from_object(environment)
     db.init_app(app)
-    with app.app_context():
-        db.create_all()
-    return app
+    if app.config.get("DEBUG"):
+        with app.app_context():
+            db.create_all()
 
-environment = config['development']
+    return app
+env_name = os.environ.get("FLASK_ENV", "development")
+environment = config[env_name]
 app = create_app(environment)
 
 
@@ -79,9 +82,10 @@ def register():
         # contrasena=contrasena_hash,
         
     )
-    if contrasena is not None or contrasena.strip() != "":
-        contrasena_hash=generate_password_hash(contrasena)
-        new_user.contrasena=contrasena_hash
+    if contrasena and contrasena.strip():
+        new_user.contrasena = generate_password_hash(contrasena)
+    else:
+        return error_response("Contraseña inválida", 400)
     db.session.add(new_user)
     db.session.commit()
 
@@ -99,11 +103,20 @@ def login_user():
         return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})    
 
     user = Usuario.query.filter_by(nombre=auth.username).first()
-    print("##############",user)
-        
-    if check_password_hash(user.contrasena, auth.password):  
-        token = jwt.encode({'id': user.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(days=1)}, app.config['SECRET_KEY'])  
-        return jsonify({'token' : token , 'id':user.id})
+
+    if not user:
+        return make_response('Usuario no existe', 401)
+
+    if check_password_hash(user.contrasena, auth.password):
+        token = jwt.encode(
+            {
+                'id': user.id,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
+            },
+            app.config['SECRET_KEY'],
+            algorithm="HS256"
+        )
+        return jsonify({'token': token, 'id': user.id})
 
     return make_response('could not verify',  401, {'WWW.Authentication': 'Basic realm: "login required"'})
 
